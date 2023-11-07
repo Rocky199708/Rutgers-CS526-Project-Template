@@ -31,7 +31,7 @@ public class Register extends HttpServlet {
 		 }
 		try {
 			Connection connection = DriverManager.getConnection("jdbc:mysql://" + 
-					"localhost/list" , "boss", "AAAAAbbbbb888;8");
+					"localhost/list?useSSL=false" , "boss", "AAAAAbbbbb888;8");
 			Statement statement = connection.createStatement();
 			statement.executeUpdate("create table accounts (name varchar(32),"
 					+ " password varchar(32))");
@@ -58,7 +58,7 @@ public class Register extends HttpServlet {
 			    Class.forName("com.mysql.jdbc.Driver" );
 
 				Connection connection = DriverManager.getConnection("jdbc:mysql://" + 
-						"localhost:3306/list" , "boss", "AAAAAbbbbb888;8");
+						"localhost:3306/list?useSSL=false" , "boss", "AAAAAbbbbb888;8");
 
 				Statement statement = connection.createStatement();
 
@@ -90,7 +90,7 @@ public class Register extends HttpServlet {
 			    Class.forName("com.mysql.jdbc.Driver" );
 
 				Connection connection = DriverManager.getConnection("jdbc:" +
-						"mysql://localhost:3306/list" , "boss", "AAAAAbbbbb888;8");
+						"mysql://localhost:3306/list?useSSL=false" , "boss", "AAAAAbbbbb888;8");
 				PreparedStatement statement = connection.prepareStatement("insert into accounts(name,password) values(?, ?)");
 
 				statement.setString(1, name);

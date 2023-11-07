@@ -86,7 +86,7 @@
 								 }
 								try {
 									Connection connection = DriverManager.getConnection("jdbc:mysql://" + 
-											"localhost:3306/list" , "boss", "AAAAAbbbbb888;8");
+											"localhost:3306/list?useSSL=false" , "boss", "AAAAAbbbbb888;8");
 									
 									String queryString = "select thing, priority " +
 											"from task where name = ? and createDate = ?";

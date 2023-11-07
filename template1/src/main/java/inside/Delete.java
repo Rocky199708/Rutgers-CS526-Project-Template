@@ -33,7 +33,7 @@ public class Delete extends HttpServlet {
 		 }
 		try {
 			Connection connection = DriverManager.getConnection("jdbc:mysql://" + 
-					"localhost:3306/list" , "boss", "AAAAAbbbbb888;8");
+					"localhost:3306/list?useSSL=false" , "boss", "AAAAAbbbbb888;8");
 			String queryString = "delete from task where createDate = ?";
 			PreparedStatement statement = connection.prepareStatement(queryString);
 			statement.setString(1,date);
