@@ -7,14 +7,14 @@ Supervised by Prof. Abello
 **Warm-up & Environment Setup**
 
 Template 1 is in the `/template1` folder
-Please follow this **[Guide](./docs/Guide1.md)**
+Please follow this **[Guide](./template1/Guide1.md)**
 
 ## Template 2
 
 **Mini-Portal**
 
 Template 2 is in the `/template2` folder
-Please follow this **[Guide](./docs/Guide2.md)**
+Please follow this **[Guide](./template2/Guide2.md)**
 
 ## Notes
 
