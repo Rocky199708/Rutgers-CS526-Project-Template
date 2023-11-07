@@ -148,6 +148,9 @@ $ sudo yum install mysql-community-server
 
 ```
 
+If you have an error `Public key for mysql-community-client-plugins-8.0.35-1.el7.x86_64.rpm is not installed`, try adding `--nogpgcheck` to circumvent this issue.
+
+
 **Starting MySQL**
 
   
