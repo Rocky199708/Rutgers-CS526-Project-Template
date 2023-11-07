@@ -119,6 +119,9 @@ $ <span class="token function">sudo</span> yum localinstall https://dev.mysql.co
 $ <span class="token function">sudo</span> yum <span class="token function">install</span> mysql-community-server
 
 </code></pre>
+
+If you have an error <code>Public key for mysql-community-client-plugins-8.0.35-1.el7.x86_64.rpm is not installed</code>, try adding <code>--nogpgcheck</code> to circumvent this issue.
+
 <p><strong>Starting MySQL</strong></p>
 <p>Once the installation is completed, start the MySQL service and enable it to automatically start on boot with:</p>
 <pre class=" language-bash"><code class="prism  language-bash">
