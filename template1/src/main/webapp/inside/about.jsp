@@ -32,7 +32,7 @@
 			</div>
 			<div id="navbar" class="navbar-collapse collapse">
 				<ul class="nav navbar-nav">
-					<li><a href="/my-webapp/about">About</a></li>
+					<li><a href="/my-webapp/inside/about">About</a></li>
 					<li><a href="/my-webapp/inside/display">My TODO List</a></li>
 				</ul>
 				<ul class="nav navbar-nav navbar-right">

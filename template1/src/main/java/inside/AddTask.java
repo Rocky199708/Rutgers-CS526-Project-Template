@@ -8,6 +8,7 @@ import java.sql.SQLException;
 import java.util.Date;
 
 import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -15,12 +16,11 @@ import javax.servlet.http.HttpServletResponse;
 /**
  * Servlet implementation class AddTask
  */
+@WebServlet(name = "AddTask", urlPatterns = {"/inside/addTask"})
 public class AddTask extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-       
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
-	 */
+    
+	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String task = request.getParameter("task");
 		String pri = request.getParameter("priority");
@@ -42,7 +42,7 @@ public class AddTask extends HttpServlet {
 				 }
 				try {
 					Connection connection = DriverManager.getConnection("jdbc:mysql://" + 
-							"localhost:3306/list?useSSL=false" , "boss", "AAAAAbbbbb888;8");
+							"localhost:3306/list?allowPublicKeyRetrieval=true&useSSL=false" , "boss", "AAAAAbbbbb888;8");
 					String queryString = "insert into task values(?,?,?,?)";
 					PreparedStatement statement = connection.prepareStatement(queryString);
 					statement.setString(1,name);

@@ -1,3 +1,12 @@
+<%@page import = "java.io.IOException" %>
+<%@page import = "java.sql.Connection" %>
+<%@page import = "java.sql.DriverManager" %>
+<%@page import = "java.sql.PreparedStatement" %>
+<%@page import = "java.sql.ResultSet" %>
+<%@page import = "java.sql.SQLException" %>
+<%@page import = "java.sql.Statement" %>
+
+
 <!doctype html>
 <html lang="en">
 
@@ -64,6 +73,14 @@
 		footer p {
 			margin-bottom: .25rem;
 		}
+
+		.main-container {
+			margin: 20px auto;
+		}
+
+		.main-container h2 {
+			margin-bottom: 20px;
+		}
 	</style>
 </head>
 
@@ -100,182 +117,102 @@
 			</div>
 		</div>
 	</header>
-
 	<main role="main">
+		<div class="container main-container">
+			<h2>Student List</h2>
+			<table class="table">
+				<thead>
+					<tr>
+						<th scope="col">#</th>
+						<th scope="col">FirstName</th>
+						<th scope="col">LastName</th>
+						<th scope="col">Email</th>
+						<th scope="col">Netid</th>
+					</tr>
+				</thead>
+				<tbody>
+					<%
+					try {
+						 Class.forName("com.mysql.jdbc.Driver" );
+					 } catch (Exception e) {
+						 System.err.println("ERROR: failed to load HSQLDB JDBC driver");
+						 e.printStackTrace(System.out);
+						 return;
+					 }
+					try {
+						Connection connection = DriverManager.getConnection("jdbc:mysql://" + 
+								"localhost:3306/list?allowPublicKeyRetrieval=true&useSSL=false" , "boss", "AAAAAbbbbb888;8");
+						String queryString;
+						queryString = "select * from student";
+						PreparedStatement statement = connection.prepareStatement(queryString);
+						ResultSet rset = statement.executeQuery();
+						int count = 1;
+						while(rset.next()){
+								String firstname = rset.getString(2);
+								String lastname = rset.getString(3);
+								String email = rset.getString(4);
+								String netid = rset.getString(5);
+								out.println("<tr>");
+								out.println("<th scope='row'>"+count+"</th>");
+								out.println("<td>" + firstname +"</td>");	
+								out.println("<td>" + lastname +"</td>");	
+								out.println("<td>" + email +"</td>");
+								out.println("<td>" + netid +"</td>");
+								out.println("</tr>");
+							count++;
+						}
+						rset.close();
+						statement.close();
+						connection.close();
+					} catch (SQLException e) {
+						e.printStackTrace(System.out);
+					}
+			%>
+				</tbody>
+			</table>
+			<!-- Button trigger modal -->
+			<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+				Add New Student
+			</button>
 
-		<section class="jumbotron text-center">
-			<div class="container">
-				<h1>Computer Science Department</h1>
-				<p class="lead text-muted">The graduate and undergraduate programs are highly ranked by the US News & World Report for computer science rankings and CS Rankings which are based on
-					faculty research publications.</p>
-				<p>
-					<a href="./display" style="background-color: #cc0033; border:none; " class="btn btn-primary my-2">Go to Student List</a>
-					<a href="#" class="btn btn-secondary my-2">Apply Fall 2020</a>
-				</p>
-			</div>
-		</section>
-
-		<div class="album py-5 bg-light">
-			<div class="container">
-				<div class="row">
-					<div class="col-md-4">
-						<div class="card mb-4 shadow-sm">
-							<svg class="bd-placeholder-img card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" focusable="false" role="img"
-								aria-label="Placeholder: Thumbnail">
-								<title>Placeholder</title>
-								<rect width="100%" height="100%" fill="#55595c" /><text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text>
-							</svg>
-							<div class="card-body">
-								<p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
-								<div class="d-flex justify-content-between align-items-center">
-									<div class="btn-group">
-										<button type="button" class="btn btn-sm btn-outline-secondary">View</button>
-										<button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>
-									</div>
-									<small class="text-muted">9 mins</small>
-								</div>
-							</div>
+			<!-- Modal -->
+			<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+				<div class="modal-dialog" role="document">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h5 class="modal-title" id="exampleModalLabel">New Student</h5>
+							<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+								<span aria-hidden="true">&times;</span>
+							</button>
 						</div>
-					</div>
-					<div class="col-md-4">
-						<div class="card mb-4 shadow-sm">
-							<svg class="bd-placeholder-img card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" focusable="false" role="img"
-								aria-label="Placeholder: Thumbnail">
-								<title>Placeholder</title>
-								<rect width="100%" height="100%" fill="#55595c" /><text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text>
-							</svg>
-							<div class="card-body">
-								<p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
-								<div class="d-flex justify-content-between align-items-center">
-									<div class="btn-group">
-										<button type="button" class="btn btn-sm btn-outline-secondary">View</button>
-										<button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>
-									</div>
-									<small class="text-muted">9 mins</small>
+						<div class="modal-body">
+							<form id="newStudentForm" action="/my-webapp/inside/addTask">
+								<div class="form-group">
+									<label for="exampleFormControlInput1">First Name</label>
+									<input type="email" class="form-control" placeholder="First Name" name="firstname">
 								</div>
-							</div>
+								<div class="form-group">
+									<label for="exampleFormControlInput1">Last Name</label>
+									<input class="form-control" placeholder="Last Name" name="lastname">
+								</div>
+								<div class="form-group">
+									<label for="exampleFormControlInput1">Netid</label>
+									<input class="form-control" placeholder="Netid" name="netid">
+								</div>
+								<div class="form-group">
+									<label for="exampleFormControlInput1">Email address</label>
+									<input type="email" class="form-control" placeholder="name@example.com" name="email">
+								</div>
 						</div>
-					</div>
-					<div class="col-md-4">
-						<div class="card mb-4 shadow-sm">
-							<svg class="bd-placeholder-img card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" focusable="false" role="img"
-								aria-label="Placeholder: Thumbnail">
-								<title>Placeholder</title>
-								<rect width="100%" height="100%" fill="#55595c" /><text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text>
-							</svg>
-							<div class="card-body">
-								<p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
-								<div class="d-flex justify-content-between align-items-center">
-									<div class="btn-group">
-										<button type="button" class="btn btn-sm btn-outline-secondary">View</button>
-										<button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>
-									</div>
-									<small class="text-muted">9 mins</small>
-								</div>
-							</div>
-						</div>
-					</div>
-
-					<div class="col-md-4">
-						<div class="card mb-4 shadow-sm">
-							<svg class="bd-placeholder-img card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" focusable="false" role="img"
-								aria-label="Placeholder: Thumbnail">
-								<title>Placeholder</title>
-								<rect width="100%" height="100%" fill="#55595c" /><text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text>
-							</svg>
-							<div class="card-body">
-								<p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
-								<div class="d-flex justify-content-between align-items-center">
-									<div class="btn-group">
-										<button type="button" class="btn btn-sm btn-outline-secondary">View</button>
-										<button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>
-									</div>
-									<small class="text-muted">9 mins</small>
-								</div>
-							</div>
-						</div>
-					</div>
-					<div class="col-md-4">
-						<div class="card mb-4 shadow-sm">
-							<svg class="bd-placeholder-img card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" focusable="false" role="img"
-								aria-label="Placeholder: Thumbnail">
-								<title>Placeholder</title>
-								<rect width="100%" height="100%" fill="#55595c" /><text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text>
-							</svg>
-							<div class="card-body">
-								<p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
-								<div class="d-flex justify-content-between align-items-center">
-									<div class="btn-group">
-										<button type="button" class="btn btn-sm btn-outline-secondary">View</button>
-										<button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>
-									</div>
-									<small class="text-muted">9 mins</small>
-								</div>
-							</div>
-						</div>
-					</div>
-					<div class="col-md-4">
-						<div class="card mb-4 shadow-sm">
-							<svg class="bd-placeholder-img card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" focusable="false" role="img"
-								aria-label="Placeholder: Thumbnail">
-								<title>Placeholder</title>
-								<rect width="100%" height="100%" fill="#55595c" /><text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text>
-							</svg>
-							<div class="card-body">
-								<p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
-								<div class="d-flex justify-content-between align-items-center">
-									<div class="btn-group">
-										<button type="button" class="btn btn-sm btn-outline-secondary">View</button>
-										<button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>
-									</div>
-									<small class="text-muted">9 mins</small>
-								</div>
-							</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+							<button type="button" onclick="document.getElementById('newStudentForm').submit();" class="btn btn-primary">Save changes</button>
 						</div>
 					</div>
 				</div>
 			</div>
 		</div>
-
 	</main>
-
-	<footer>
-		<div class="container">
-			<div class="row">
-				<div class="col-12 col-md">
-				  <small class="d-block mb-3 text-muted">Copyright 2020, Rutgers, The State University of New Jersey. All rights reserved.</small>
-				</div>
-				<div class="col-6 col-md">
-				  <h5>Features</h5>
-				  <ul class="list-unstyled text-small">
-					<li><a class="text-muted" href="#">Cool stuff</a></li>
-					<li><a class="text-muted" href="#">Random feature</a></li>
-					<li><a class="text-muted" href="#">Team feature</a></li>
-					<li><a class="text-muted" href="#">Stuff for developers</a></li>
-					<li><a class="text-muted" href="#">Another one</a></li>
-					<li><a class="text-muted" href="#">Last time</a></li>
-				  </ul>
-				</div>
-				<div class="col-6 col-md">
-				  <h5>Resources</h5>
-				  <ul class="list-unstyled text-small">
-					<li><a class="text-muted" href="#">Resource</a></li>
-					<li><a class="text-muted" href="#">Resource name</a></li>
-					<li><a class="text-muted" href="#">Another resource</a></li>
-					<li><a class="text-muted" href="#">Final resource</a></li>
-				  </ul>
-				</div>
-				<div class="col-6 col-md">
-				  <h5>About</h5>
-				  <ul class="list-unstyled text-small">
-					<li><a class="text-muted" href="#">Team</a></li>
-					<li><a class="text-muted" href="#">Locations</a></li>
-					<li><a class="text-muted" href="#">Privacy</a></li>
-					<li><a class="text-muted" href="#">Terms</a></li>
-				  </ul>
-				</div>
-			  </div></div>
-	</footer>
 </body>
 
 </html>

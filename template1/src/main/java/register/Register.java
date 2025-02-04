@@ -10,6 +10,7 @@ import java.sql.Statement;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -18,7 +19,7 @@ import javax.servlet.http.HttpServletResponse;
  * Servlet implementation class Register
  */
 
-
+@WebServlet(name = "Register", urlPatterns = {"/register"})
 public class Register extends HttpServlet {
 	@Override
 	public void init() throws ServletException {
@@ -31,7 +32,7 @@ public class Register extends HttpServlet {
 		 }
 		try {
 			Connection connection = DriverManager.getConnection("jdbc:mysql://" + 
-					"localhost/list?useSSL=false" , "boss", "AAAAAbbbbb888;8");
+					"localhost/list?allowPublicKeyRetrieval=true&useSSL=false" , "boss", "AAAAAbbbbb888;8");
 			Statement statement = connection.createStatement();
 			statement.executeUpdate("create table accounts (name varchar(32),"
 					+ " password varchar(32))");
@@ -44,7 +45,7 @@ public class Register extends HttpServlet {
 		}
 		
 	}
-	
+	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 			
@@ -58,7 +59,7 @@ public class Register extends HttpServlet {
 			    Class.forName("com.mysql.jdbc.Driver" );
 
 				Connection connection = DriverManager.getConnection("jdbc:mysql://" + 
-						"localhost:3306/list?useSSL=false" , "boss", "AAAAAbbbbb888;8");
+						"localhost:3306/list?allowPublicKeyRetrieval=true&useSSL=false" , "boss", "AAAAAbbbbb888;8");
 
 				Statement statement = connection.createStatement();
 
@@ -90,7 +91,7 @@ public class Register extends HttpServlet {
 			    Class.forName("com.mysql.jdbc.Driver" );
 
 				Connection connection = DriverManager.getConnection("jdbc:" +
-						"mysql://localhost:3306/list?useSSL=false" , "boss", "AAAAAbbbbb888;8");
+						"mysql://localhost:3306/list?allowPublicKeyRetrieval=true&useSSL=false" , "boss", "AAAAAbbbbb888;8");
 				PreparedStatement statement = connection.prepareStatement("insert into accounts(name,password) values(?, ?)");
 
 				statement.setString(1, name);

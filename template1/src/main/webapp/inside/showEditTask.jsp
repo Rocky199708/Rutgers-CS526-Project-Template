@@ -40,7 +40,7 @@
 			</div>
 			<div id="navbar" class="navbar-collapse collapse">
 				<ul class="nav navbar-nav">
-					<li><a href="/my-webapp/about">About</a></li>
+					<li><a href="/my-webapp/inside/about">About</a></li>
 					<li><a href="/my-webapp/inside/display">My TODO List</a></li>
 				</ul>
 				<ul class="nav navbar-nav navbar-right">
@@ -86,7 +86,7 @@
 								 }
 								try {
 									Connection connection = DriverManager.getConnection("jdbc:mysql://" + 
-											"localhost:3306/list?useSSL=false" , "boss", "AAAAAbbbbb888;8");
+											"localhost:3306/list?allowPublicKeyRetrieval=true&useSSL=false" , "boss", "AAAAAbbbbb888;8");
 									
 									String queryString = "select thing, priority " +
 											"from task where name = ? and createDate = ?";

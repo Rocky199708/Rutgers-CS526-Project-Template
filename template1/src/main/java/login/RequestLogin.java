@@ -16,13 +16,11 @@ import javax.servlet.http.HttpServletResponse;
 /**
  * Servlet implementation class RequestLogin
  */
-@WebServlet("/RequestLogin")
+@WebServlet(name = "RequestLogin", urlPatterns = {"/requestLogin"})
 public class RequestLogin extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
-	 */
+	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String name = request.getParameter("name");
 		String password = request.getParameter("password");
@@ -35,7 +33,7 @@ public class RequestLogin extends HttpServlet {
 			    Class.forName("com.mysql.jdbc.Driver" );
 			
 				Connection connection = DriverManager.getConnection("jdbc:mysql://" + 
-						"localhost:3306/list?useSSL=false" , "boss", "AAAAAbbbbb888;8");
+						"localhost:3306/list?allowPublicKeyRetrieval=true&useSSL=false" , "boss", "AAAAAbbbbb888;8");
 								
 				Statement statement = connection.createStatement();
 								
@@ -63,8 +61,8 @@ public class RequestLogin extends HttpServlet {
 				} else {
 					response.sendRedirect(request.getContextPath() + "/loginFault.jsp");					
 				}
-			} catch (SQLException e) {
-				e.printStackTrace(System.out);
+			// } catch (SQLException e) {
+			// 	e.printStackTrace(System.out);
 			} catch (Exception e) {
 				e.printStackTrace(System.out);
 			}
