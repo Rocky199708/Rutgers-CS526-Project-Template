@@ -4,9 +4,7 @@
 ## What is Included in the Template
 
 - A Working Web Application which is a "simple todo list" (😎 Don't worry, it's working)
-
 - Very simple user login and signup logic
-
 - Basic CRUD operations (Create, Read, Update, and Delete)
 
 ## Intro to the architecture
@@ -14,294 +12,221 @@
 Web Application
 
 ```mermaid
-
 graph LR
-
 A(Java Servlet) --> B(Tomcat)
-
 B --> C(Web Broswer)
-
 C-->B
-
 ```
 
 Backend
-
-- Java 1.7
-
-- javax.servlet-api 4.0.0
-
-- Tomcat 7
-
+- Java 21
+- javax.servlet-api 4.0.1
+- Tomcat 9
 - Maven
 
-  
-
 Frontend
-
 - HTML, CSS, JS
-
 - Bootstrap 3.0.0 for CSS styling
-
-  
 
 ## Step-by-step Environment Setup Guide
 
-  
+The following guide is base on **CentOS 10 Stream** machine. (Kernel Version x86_64 Linux 6.12.0-39.el10.x86_64)
 
-The following guide is base on **CentOS 7** machine. (Kernel Version x86_64 Linux 3.10.0-1062.9.1.el7.x86_64)
+### Install Java 21 and Maven
 
-  
-
-### Install Java 7
+The following command will install Maven and its dependencies (including Java 21) on your CentOS 10 Stream machine.
 
 ```bash
-
-$ sudo yum install java-1.7.0-openjdk-devel
-
+$ sudo yum install maven
 ```
 
 Warning Again : If you are on a different linux distribution other than **CentOS**, you may have to use a different approach for every step.
 
-  
-
 By the way, to check the version of your default Java, run this command:
 
 ```bash
-
 $ java --version
+```
 
+You should see something like this:
+
+```text
+openjdk 21.0.5 2024-10-15 LTS
+OpenJDK Runtime Environment (Red_Hat-21.0.5.0.11-1) (build 21.0.5+11-LTS)
+OpenJDK 64-Bit Server VM (Red_Hat-21.0.5.0.11-1) (build 21.0.5+11-LTS, mixed mode, sharing)
 ```
 
 If you have different Java version installed locally, you may want to use **alternative** command.
 
 ```bash
-
-sudo alternatives --config java
-
+sudo update-alternatives --config java
 ```
 
 Here is an example of the output:
-
 ```
-
-There are 5 programs which provide 'java'.
-
-  
+There are 2 programs which provide 'java'.
 
 Selection Command
 
 -----------------------------------------------
 
-1 java-1.7.0-openjdk.x86_64 (/usr/lib/jvm/java-1.7.0-openjdk-1.7.0.161-2.6.12.0.el7_4.x86_64/jre/bin/java)
+*+ 1           /usr/lib/jvm/java-21-openjdk/bin/java
 
-2 java-1.8.0-openjdk.x86_64 (/usr/lib/jvm/java-1.8.0-openjdk-1.8.0.151-5.b12.el7_4.x86_64/jre/bin/java)
-
-  
-  
+   2           /usr/lib/jvm/java-1.8.0-openjdk-1.8.0.151-5.b12.el7_4.x86_64/jre/bin/java
 
 Enter to keep the current selection[+], or type selection number:
 
 ```
 
-### Install Maven
+Verify the installation of Maven
 
 ```bash
-
-$ sudo yum install maven
-
+$ mvn -version
 ```
 
-Verify the installation
+Output:
+```
+Apache Maven 3.9.9 (Red Hat 3.9.9-1)
+Maven home: /usr/share/maven
+Java version: 21.0.5, vendor: Red Hat, Inc., runtime: /usr/lib/jvm/java-21-openjdk
+Default locale: en_US, platform encoding: UTF-8
+OS name: "linux", version: "6.12.0-39.el10.x86_64", arch: "amd64", family: "unix"
+```
+
+### Install and run Tomcat 9
 
 ```bash
+$ sudo yum install tomcat
+```
 
-$ mvn -version
+To verify the installation, you can check the version of the installed Tomcat:
 
+```bash
+$ tomcat version
 ```
 
 Output:
 
-```
-
-Apache Maven 3.0.5 (Red Hat 3.0.5-17)
-
-Maven home: /usr/share/maven
-
-Java version: 1.7.0_241, vendor: Oracle Corporation
-
-Java home: /usr/lib/jvm/java-1.7.0-openjdk-1.7.0.241-2.6.20.0.el7_7.x86_64/jre
-
-Default locale: en_US, platform encoding: UTF-8
-
-OS name: "linux", version: "3.10.0-1062.9.1.el7.x86_64", arch: "amd64", family: "unix"
-
+```text
+NOTE: Picked up JDK_JAVA_OPTIONS:  --add-opens=java.base/java.lang=ALL-UNNAMED --add-opens=java.base/java.io=ALL-UNNAMED --add-opens=java.base/java.util=ALL-UNNAMED --add-opens=java.base/java.util.concurrent=ALL-UNNAMED --add-opens=java.rmi/sun.rmi.transport=ALL-UNNAMED
+Server version: Apache Tomcat/9.0.87
+Server built:   Oct 29 2024 00:00:00 UTC
+Server number:  9.0.87.0
+OS Name:        Linux
+OS Version:     6.12.0-39.el10.x86_64
+Architecture:   amd64
+JVM Version:    21.0.5+11-LTS
+JVM Vendor:     Red Hat, Inc.
 ```
 
 ### Install and Configure MySQL
 
 ```bash
-
-$ sudo yum localinstall https://dev.mysql.com/get/mysql80-community-release-el7-1.noarch.rpm
-
-$ sudo yum install mysql-community-server
-
+$ sudo yum install mysql-server
 ```
 
-If you have an error `Public key for mysql-community-client-plugins-8.0.35-1.el7.x86_64.rpm is not installed`, try adding `--nogpgcheck` to circumvent this issue.
-
-
 **Starting MySQL**
-
-  
 
 Once the installation is completed, start the MySQL service and enable it to automatically start on boot with:
 
 ```bash
-
 $ sudo systemctl enable mysqld
-
 $ sudo systemctl start mysqld
-
 ```
 
 We can check the MySQL service status by typing:
-
 ```bash
-
 sudo systemctl status mysqld
-
 ```
 
 Output
 
-```
-
-● mysqld.service - MySQL Server
-
-Loaded: loaded (/usr/lib/systemd/system/mysqld.service; enabled; vendor preset: disabled)
-
-Active: active (running) since Wed 2018-05-23 11:02:43 UTC; 14min ago
-
-Docs: man:mysqld(8)
-
-http://dev.mysql.com/doc/refman/en/using-systemd.html
-
-Process: 4293 ExecStartPre=/usr/bin/mysqld_pre_systemd (code=exited, status=0/SUCCESS)
-
-Main PID: 4310 (mysqld)
-
-Status: "SERVER_OPERATING"
-
-CGroup: /system.slice/mysqld.service
-
-└─4310 /usr/sbin/mysqld
-
+```text
+● mysqld.service - MySQL 8.4 database server
+     Loaded: loaded (/usr/lib/systemd/system/mysqld.service; enabled; preset: disabled)
+     Active: active (running) since Mon 2025-02-03 23:51:37 UTC; 21h ago
+ Invocation: 0dd1970294bd406d8ea346f54f3d7440
+   Main PID: 7888 (mysqld)
+     Status: "Server is operational"
+      Tasks: 36 (limit: 10816)
+     Memory: 435.5M (peak: 454.4M, swap: 52.2M, swap peak: 53.7M)
+        CPU: 6min 50.483s
+     CGroup: /system.slice/mysqld.service
+             └─7888 /usr/libexec/mysqld --basedir=/usr
 ```
 
 **Securing MySQL**
 
-  
-
-Get the auto-generated password
-
-```bash
-
-$ sudo grep 'temporary password' /var/log/mysqld.log
-
-```
-
-Output
-
-```
-
-A temporary password is generated for root@localhost: q&0)V!?fjksL
-
-```
-
 Run the `mysql_secure_installation` command to improve the security of our MySQL installation:
 
 ```bash
-
 $ sudo mysql_secure_installation
-
 ```
 
 The script will also ask you to remove the anonymous user, restrict root user access to the local machine and remove the test database. You should answer “Y” (yes) to all questions.
 
-  
-
 **Connecting to MySQL from the command line**
-
-  
 
 To log in to the MySQL server as the root user type:
 
 ```bash
-
 mysql -u root -p
-
 ```
 
 **Create a Database**
 
-  
-
 Once you are connected to the MySQL shell, you can create a new database by typing the following command:
 
 ```sql
-
-CREATE  DATABASE list;
-
+CREATE DATABASE list;
 ```
 
 **Create a Table**
 
-  
-
 You don't have to create a table yourself. The Java servlet application will create it for you on the fly when it is running.
 
-  
-
 **Create a MySQL User**
-
 ```sql
-
 CREATE USER 'boss'@'localhost' IDENTIFIED BY  'AAAAAbbbbb888;8';
-
 GRANT ALL PRIVILEGES ON list.*  TO  'boss'@'localhost';
-
 ALTER USER 'boss'@'localhost' IDENTIFIED WITH mysql_native_password BY  'AAAAAbbbbb888;8';
-
 FLUSH PRIVILEGES;
-
 ```
 
 Make sure you copy-paste the above commands. They are very important.
 
-  
 
-## Run the Application
+## Compile the Application
 
-cd into the project template folder
+`cd` into the project template folder
 
 ```bash
-
-$ mvn tomcat:run
-
+$ mvn clean package
 ```
 
-  
+This command will generate a `war` (Web Application Archive) file in the `target` folder.
+
+## Deploy and Run the Application
+
+Copy the `war` file to the tomcat webapps folder
+
+```bash
+$ sudo cp target/my-webapp.war /var/lib/tomcat/webapps/
+```
+
+Start the tomcat service
+
+```bash
+$ tomcat start
+```
 
 Go to you web browser, navigate to `ip-of-your-server:8080\my-webapp`
 
 If you host the service on local machine, go to `localhost:8080\my-webapp`
 
-  
+Note: If you use a remote server, make sure you update the firewall settings to allow traffic on port 8080.
 
 You can register an account and login to see if everything is right.
-
-  
 
 ![526-1.PNG](https://i.loli.net/2020/01/27/A2mKyRjEMCILSWY.png)
 
@@ -309,6 +234,6 @@ You can register an account and login to see if everything is right.
 
   
 
-Authors
+Authors: Enkai Ji
 
-: Enkai Ji
+Updated by Haoyang Zhang for CentOS 10 Stream, Java 21 and Tomcat 9
